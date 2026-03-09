@@ -65,7 +65,7 @@ const Contact: React.FC = () => {
                                         </div>
                                         <div>
                                             <p className="text-indigo-200 text-xs font-bold uppercase tracking-widest">Email me</p>
-                                            <p className="font-bold">hello@rafi-dev.com</p>
+                                            <p className="font-bold">rafiahmadghifari859@gmail.com</p>
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-6">
