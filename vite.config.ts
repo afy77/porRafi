@@ -6,7 +6,7 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, '.', '');
 
   return {
-    base: '/porRafi/', // ⬅️ INI KUNCINYA
+    base: '/', // Vercel menggunakan root '/' sementara GitHub Pages akan menggunakan override dari CLI
 
     server: {
       port: 4000,
