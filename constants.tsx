@@ -12,6 +12,7 @@ import {
   Palette
 } from 'lucide-react';
 import { Skill, Project, TimelineItem, Article } from './types';
+const asset = (path: string) => `${import.meta.env.BASE_URL}${path}`;
 
 export const SKILLS: Skill[] = [
   { name: 'Interactive UI Development', level: 95, icon: <Layout className="w-5 h-5" /> },
@@ -24,10 +25,10 @@ export const SKILLS: Skill[] = [
 
 export const PROJECTS: Project[] = [
   {
-    title: 'Point of Sale (POS) Web App',
+    title: 'Point of Sales (POS) Web App',
     description: 'A comprehensive web-based management system for retail transactions and inventory tracking.',
     category: 'Web Application',
-    image: 'https://picsum.photos/seed/pos/800/600'
+    image: asset('images/pos.jpeg')
   },
   {
     title: 'Class Attendance App',
@@ -39,7 +40,7 @@ export const PROJECTS: Project[] = [
     title: 'Company Profile Website',
     description: 'Modern, high-converting corporate website with clean aesthetics and fast performance.',
     category: 'Landing Page',
-    image: '/images/sindigilive.gif'
+    image: asset('images/sindigilive.gif')
   },
   {
     title: 'Personal Portfolio',
@@ -69,7 +70,7 @@ export const EXPERIENCE: TimelineItem[] = [
 
 export const ARTICLES: Article[] = [
   {
-    title: 'Cara Memahami TPS (Technology Performance Strategy)',
+    title: 'Cara Memahami TPS (Transactions per Second)',
     summary: 'An in-depth look at understanding performance metrics in modern web environments.',
     link: 'https://apmgeeks.com/id/artikel/19-application-performance-monitoring/651-mengenal-tps-transactions-per-second-ukuran-kecepatan-transaksi-dalam-sistem.html',
     date: '2025'

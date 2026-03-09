@@ -5,7 +5,7 @@ import SectionHeading from '../components/SectionHeading';
 import { PROJECTS } from '@/constants';
 
 const Portfolio: React.FC = () => (
-    <section id="portfolio" className="py-24 bg-slate-50">
+    <section id="portfolio" className="py-24 bg-slate-50 dark:bg-slate-800">
         <div className="max-w-7xl mx-auto px-6">
             <SectionHeading title="Portfolio" subtitle="Recent Projects & Creations" centered />
             <div className="grid md:grid-cols-2 gap-8">
@@ -14,9 +14,9 @@ const Portfolio: React.FC = () => (
                         key={idx}
                         initial={{ opacity: 0, scale: 0.95 }}
                         whileInView={{ opacity: 1, scale: 1 }}
-                        viewport={{ once: true }}
+                        viewport={{ once: false, amount: 0.2 }}
                         transition={{ delay: idx * 0.1 }}
-                        className="group relative bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-slate-100"
+                        className="group relative bg-white dark:bg-[#0f172a] rounded-3xl overflow-hidden shadow-sm hover:shadow-xl dark:shadow-indigo-900/20 transition-all duration-500 border border-slate-100 dark:border-slate-700"
                     >
                         <div className="h-72 overflow-hidden relative">
                             <img
@@ -27,10 +27,10 @@ const Portfolio: React.FC = () => (
                             <div className="absolute inset-0 bg-indigo-600/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                         </div>
                         <div className="p-8">
-                            <span className="text-xs font-bold text-indigo-600 uppercase tracking-widest mb-2 block">{project.category}</span>
-                            <h4 className="text-2xl font-bold text-slate-900 mb-3">{project.title}</h4>
-                            <p className="text-slate-500 mb-6 leading-relaxed">{project.description}</p>
-                            <button className="flex items-center gap-2 text-indigo-600 font-bold hover:gap-3 transition-all">
+                            <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest mb-2 block">{project.category}</span>
+                            <h4 className="text-2xl font-bold text-slate-900 dark:text-white mb-3">{project.title}</h4>
+                            <p className="text-slate-500 dark:text-slate-400 mb-6 leading-relaxed">{project.description}</p>
+                            <button className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-bold hover:gap-3 transition-all">
                                 Details <ChevronRight size={18} />
                             </button>
                         </div>

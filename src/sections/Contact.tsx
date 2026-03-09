@@ -1,19 +1,57 @@
 import React, { useState } from 'react';
 import { Mail, Linkedin, Github, Send } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const Contact: React.FC = () => {
     const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        alert("Thank you! Your message has been sent (Mockup).");
-        setFormData({ name: '', email: '', message: '' });
+        setIsSubmitting(true);
+        setSubmitStatus('idle');
+
+        try {
+            const formDataToSend = new FormData();
+            
+            // NOTE: Replace this access key with your actual Web3Forms access key
+            formDataToSend.append("access_key", "f6aae66b-8106-44f8-80a1-de4afd03f3e4"); 
+            formDataToSend.append("name", formData.name);
+            formDataToSend.append("email", formData.email);
+            formDataToSend.append("message", formData.message);
+
+            const response = await fetch("https://api.web3forms.com/submit", {
+                method: "POST",
+                body: formDataToSend
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                setSubmitStatus('success');
+                setFormData({ name: '', email: '', message: '' });
+            } else {
+                setSubmitStatus('error');
+            }
+        } catch (error) {
+            setSubmitStatus('error');
+        } finally {
+            setIsSubmitting(false);
+            setTimeout(() => setSubmitStatus('idle'), 5000); // Reset status after 5s
+        }
     };
 
     return (
-        <section id="contact" className="py-24 bg-slate-50">
+        <section id="contact" className="py-24 bg-slate-50 dark:bg-slate-800">
             <div className="max-w-7xl mx-auto px-6">
-                <div className="bg-white rounded-[40px] shadow-2xl shadow-indigo-100 overflow-hidden">
+                <motion.div 
+                    initial={{ opacity: 0, y: 40 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: false, amount: 0.2, margin: "-100px" }}
+                    transition={{ duration: 0.7 }}
+                    className="bg-white dark:bg-[#0f172a] rounded-[40px] shadow-2xl shadow-indigo-100 dark:shadow-indigo-900/20 overflow-hidden"
+                >
                     <div className="grid lg:grid-cols-5">
                         <div className="lg:col-span-2 bg-indigo-600 p-12 text-white flex flex-col justify-between">
                             <div>
@@ -56,22 +94,22 @@ const Contact: React.FC = () => {
                             <form onSubmit={handleSubmit} className="space-y-6">
                                 <div className="grid md:grid-cols-2 gap-6">
                                     <div className="space-y-2">
-                                        <label className="text-sm font-bold text-slate-700">Full Name</label>
+                                        <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Full Name</label>
                                         <input
                                             type="text"
                                             required
-                                            className="w-full px-6 py-4 rounded-xl bg-slate-50 border border-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+                                            className="w-full px-6 py-4 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-100 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
                                             placeholder="John Doe"
                                             value={formData.name}
                                             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                         />
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="text-sm font-bold text-slate-700">Email Address</label>
+                                        <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Email Address</label>
                                         <input
                                             type="email"
                                             required
-                                            className="w-full px-6 py-4 rounded-xl bg-slate-50 border border-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+                                            className="w-full px-6 py-4 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-100 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
                                             placeholder="john@example.com"
                                             value={formData.email}
                                             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -79,11 +117,11 @@ const Contact: React.FC = () => {
                                     </div>
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-sm font-bold text-slate-700">Your Message</label>
+                                    <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Your Message</label>
                                     <textarea
                                         rows={6}
                                         required
-                                        className="w-full px-6 py-4 rounded-xl bg-slate-50 border border-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all resize-none"
+                                        className="w-full px-6 py-4 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-100 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all resize-none"
                                         placeholder="Tell me about your project..."
                                         value={formData.message}
                                         onChange={(e) => setFormData({ ...formData, message: e.target.value })}
@@ -91,15 +129,35 @@ const Contact: React.FC = () => {
                                 </div>
                                 <button
                                     type="submit"
-                                    className="w-full py-4 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 transition-all flex items-center justify-center gap-3 shadow-lg shadow-indigo-100"
+                                    disabled={isSubmitting}
+                                    className={`w-full py-4 text-white rounded-xl font-bold transition-all flex items-center justify-center gap-3 shadow-lg ${
+                                        isSubmitting ? 'bg-indigo-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700 shadow-indigo-100 dark:shadow-indigo-900/40'
+                                    }`}
                                 >
-                                    Send Message
-                                    <Send size={18} />
+                                    {isSubmitting ? 'Sending...' : 'Send Message'}
+                                    {!isSubmitting && <Send size={18} />}
                                 </button>
+                                
+                                {submitStatus === 'success' && (
+                                    <motion.p 
+                                        initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+                                        className="text-green-600 dark:text-green-400 font-bold text-sm text-center bg-green-50 dark:bg-green-900/30 p-4 rounded-xl"
+                                    >
+                                        Thank you! Your message has been sent successfully.
+                                    </motion.p>
+                                )}
+                                {submitStatus === 'error' && (
+                                    <motion.p 
+                                        initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+                                        className="text-red-600 dark:text-red-400 font-bold text-sm text-center bg-red-50 dark:bg-red-900/30 p-4 rounded-xl"
+                                    >
+                                        Oops! Something went wrong. Please try again.
+                                    </motion.p>
+                                )}
                             </form>
                         </div>
                     </div>
-                </div>
+                </motion.div>
             </div>
         </section>
     );
